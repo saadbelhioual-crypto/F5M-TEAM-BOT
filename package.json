@@ -1,0 +1,19 @@
+{
+  "name": "f5m-bot-dashboard",
+  "version": "2.0.0",
+  "description": "لوحة تحكم أسطورية لبوت تلجرام",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo build complete",
+    "start": "vercel start",
+    "deploy": "vercel deploy --prod"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  },
+  "keywords": ["telegram", "bot", "dashboard", "vercel"],
+  "author": "F5M-TEAM",
+  "license": "MIT"
+}
