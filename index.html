@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F5M Bot Control Panel</title>
+    <title>F5M Bot Control Panel - الإدارة المتقدمة</title>
     <style>
         * {
             margin: 0;
@@ -30,20 +30,22 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 20% 50%, rgba(255, 165, 0, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 20% 50%, rgba(255, 165, 0, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(123, 47, 247, 0.05) 0%, transparent 50%);
             pointer-events: none;
         }
 
         .container {
-            background: rgba(10, 10, 30, 0.7);
+            background: rgba(10, 10, 30, 0.8);
             backdrop-filter: blur(20px);
             border-radius: 30px;
             padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            max-width: 600px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            max-width: 650px;
             width: 100%;
             animation: fadeIn 0.5s ease-out;
+            z-index: 1;
         }
 
         @keyframes fadeIn {
@@ -63,8 +65,15 @@
             background-clip: text;
             color: transparent;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7b2ff7;
+            margin-bottom: 30px;
+            font-size: 0.9em;
         }
 
         .input-group {
@@ -120,11 +129,17 @@
         }
 
         .card {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
             border: 1px solid rgba(123, 47, 247, 0.3);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 106, 0, 0.5);
+            box-shadow: 0 5px 15px rgba(123, 47, 247, 0.2);
         }
 
         .stat {
@@ -138,9 +153,12 @@
         }
 
         .stat-value {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
-            color: #ff6a00;
+            background: linear-gradient(135deg, #ff6a00, #00d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .warning {
@@ -173,6 +191,7 @@
             border-radius: 12px;
             animation: slideIn 0.3s;
             z-index: 1000;
+            font-weight: bold;
         }
 
         @keyframes slideIn {
@@ -193,18 +212,46 @@
             background: linear-gradient(135deg, #ff0000, #7b2ff7);
             margin-top: 20px;
         }
+
+        .info-text {
+            color: #7b2ff7;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+
+        .status-inactive {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0000;
+            border: 1px solid #ff0000;
+        }
     </style>
 </head>
 <body>
     <div class="container" id="app">
-        <h1>🎮 F5M Bot Control Panel</h1>
+        <h1>🎮 F5M BOT CONTROL</h1>
+        <div class="subtitle">نظام إدارة البوتات المتقدم</div>
         
         <div id="loginSection">
             <div class="input-group">
-                <label>🔐 Admin Code</label>
+                <label>🔐 ADMIN CODE</label>
                 <input type="password" id="adminCode" placeholder="أدخل كود المشرف">
             </div>
-            <button onclick="verifyAdmin()">🚀 دخول</button>
+            <button onclick="verifyAdmin()">🚀 دخول إلى لوحة التحكم</button>
         </div>
 
         <div id="adminPanel" class="admin-panel">
@@ -218,17 +265,23 @@
                     <span>🎯 الحد الأقصى للمستخدمين:</span>
                     <span class="stat-value" id="maxUsers">0</span>
                 </div>
+                <div class="stat">
+                    <span>📈 نسبة الاستخدام:</span>
+                    <span class="stat-value" id="usagePercentage">0%</span>
+                </div>
             </div>
 
             <div class="card">
                 <h3>⚙️ إعدادات البوت</h3>
                 <div class="input-group">
                     <label>🤖 Bot Token</label>
-                    <input type="text" id="botToken" placeholder="أدخل توكن البوت">
+                    <input type="text" id="botToken" placeholder="أدخل توكن البوت من @BotFather">
+                    <div class="info-text">💡 احصل على التوكن من @BotFather في تيليجرام</div>
                 </div>
                 <div class="input-group">
-                    <label>👑 Admin Password</label>
-                    <input type="text" id="adminPassword" placeholder="كلمة سر التفعيل">
+                    <label>🔑 Admin Password (كلمة سر التفعيل)</label>
+                    <input type="text" id="adminPassword" placeholder="كلمة سر التفعيل للمستخدمين">
+                    <div class="info-text">💡 المستخدمون سيستخدمون هذه الكلمة لتفعيل البوت</div>
                 </div>
                 <div class="input-group">
                     <label>📊 الحد الأقصى للمستخدمين</label>
@@ -239,11 +292,17 @@
 
             <div class="card">
                 <h3>🔧 إدارة البوت</h3>
-                <button onclick="toggleBot()" id="toggleBotBtn">✅ تفعيل البوت</button>
+                <button onclick="toggleBot()" id="toggleBotBtn">▶️ تفعيل البوت</button>
                 <div class="warning" id="botStatus"></div>
+                <div class="info-text" style="margin-top: 10px;">
+                    ⚠️ ملاحظة: البوت لن يعمل إلا بعد:
+                    <br>1. إضافة التوكن الصحيح
+                    <br>2. تفعيل البوت من هنا
+                    <br>3. المستخدمون سيحتاجون كلمة السر للتفعيل
+                </div>
             </div>
 
-            <button class="logout-btn" onclick="logout()">🚪 خروج</button>
+            <button class="logout-btn" onclick="logout()">🚪 خروج من لوحة التحكم</button>
         </div>
     </div>
 
@@ -266,7 +325,7 @@
                 document.getElementById('loginSection').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 await loadSettings();
-                showMessage('✅ تم الدخول بنجاح', 'success');
+                showMessage('✅ تم الدخول بنجاح إلى لوحة التحكم', 'success');
             } else {
                 showMessage('❌ كود المشرف غير صحيح', 'error');
             }
@@ -277,22 +336,33 @@
                 const response = await fetch('/api/get-settings');
                 const data = await response.json();
                 document.getElementById('botToken').value = data.token || '';
-                document.getElementById('adminPassword').value = data.adminPassword || '';
-                document.getElementById('maxUsersInput').value = data.maxUsers || 20;
-                document.getElementById('activeUsers').textContent = data.activeUsers || 0;
-                document.getElementById('maxUsers').textContent = data.maxUsers || 20;
-                botActive = data.isActive || false;
+                document.getElementById('adminPassword').value = data.admin_password || '';
+                document.getElementById('maxUsersInput').value = data.max_users || 20;
+                document.getElementById('activeUsers').textContent = data.active_users || 0;
+                document.getElementById('maxUsers').textContent = data.max_users || 20;
+                
+                const percentage = ((data.active_users / data.max_users) * 100).toFixed(1);
+                document.getElementById('usagePercentage').textContent = `${percentage}%`;
+                
+                botActive = data.is_active || false;
                 updateBotStatus();
             } catch (error) {
                 console.error('Error loading settings:', error);
+                showMessage('❌ فشل في تحميل الإعدادات', 'error');
             }
         }
 
         async function updateSettings() {
+            const token = document.getElementById('botToken').value;
+            if (!token) {
+                showMessage('⚠️ الرجاء إدخال توكن البوت', 'error');
+                return;
+            }
+            
             const settings = {
-                token: document.getElementById('botToken').value,
-                adminPassword: document.getElementById('adminPassword').value,
-                maxUsers: parseInt(document.getElementById('maxUsersInput').value)
+                token: token,
+                admin_password: document.getElementById('adminPassword').value,
+                max_users: parseInt(document.getElementById('maxUsersInput').value)
             };
 
             try {
@@ -305,9 +375,11 @@
                 if (response.ok) {
                     showMessage('✅ تم تحديث الإعدادات بنجاح', 'success');
                     await loadSettings();
+                } else {
+                    showMessage('❌ فشل في تحديث الإعدادات', 'error');
                 }
             } catch (error) {
-                showMessage('❌ فشل في تحديث الإعدادات', 'error');
+                showMessage('❌ خطأ في الاتصال بالخادم', 'error');
             }
         }
 
@@ -317,9 +389,19 @@
                     method: 'POST'
                 });
                 const data = await response.json();
-                botActive = data.isActive;
+                botActive = data.is_active;
                 updateBotStatus();
-                showMessage(`✅ البوت ${botActive ? 'مفعل' : 'معطل'}`, 'success');
+                
+                if (botActive) {
+                    const token = document.getElementById('botToken').value;
+                    if (token) {
+                        showMessage('✅ تم تفعيل البوت بنجاح! يمكن للمستخدمين الآن استخدامه', 'success');
+                    } else {
+                        showMessage('⚠️ البوت مفعل لكن لا يوجد توكن! الرجاء إضافة التوكن أولاً', 'warning');
+                    }
+                } else {
+                    showMessage('⏸️ تم تعطيل البوت', 'success');
+                }
             } catch (error) {
                 showMessage('❌ فشل في تغيير حالة البوت', 'error');
             }
@@ -328,13 +410,21 @@
         function updateBotStatus() {
             const statusDiv = document.getElementById('botStatus');
             const toggleBtn = document.getElementById('toggleBotBtn');
+            const token = document.getElementById('botToken').value;
             
-            if (botActive) {
-                statusDiv.innerHTML = '🟢 البوت مفعل ويعمل بشكل طبيعي';
+            if (botActive && token) {
+                statusDiv.innerHTML = '🟢 <strong>البوت مفعل ويعمل بشكل طبيعي</strong><br>✅ المستخدمون يمكنهم التفعيل باستخدام كلمة السر';
+                statusDiv.className = 'warning success';
+                toggleBtn.textContent = '⏸️ تعطيل البوت';
+                toggleBtn.style.background = 'linear-gradient(135deg, #ff6a00, #ff0000)';
+            } else if (botActive && !token) {
+                statusDiv.innerHTML = '⚠️ <strong>البوت مفعل لكن لا يوجد توكن!</strong><br>❌ الرجاء إضافة توكن البوت أولاً';
+                statusDiv.className = 'warning error';
                 toggleBtn.textContent = '⏸️ تعطيل البوت';
                 toggleBtn.style.background = 'linear-gradient(135deg, #ff6a00, #ff0000)';
             } else {
-                statusDiv.innerHTML = '🔴 البوت معطل - قم بتفعيله لبدء العمل';
+                statusDiv.innerHTML = '🔴 <strong>البوت معطل</strong><br>⏩ قم بتفعيل البوت بعد إضافة التوكن الصحيح';
+                statusDiv.className = 'warning';
                 toggleBtn.textContent = '▶️ تفعيل البوت';
                 toggleBtn.style.background = 'linear-gradient(135deg, #00d4ff, #7b2ff7)';
             }
@@ -345,7 +435,16 @@
             document.getElementById('loginSection').style.display = 'block';
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminCode').value = '';
-            showMessage('👋 تم تسجيل الخروج', 'success');
+            showMessage('👋 تم تسجيل الخروج بنجاح', 'success');
+        }
+
+        // تحديث الإحصائيات كل 5 ثواني
+        if (adminAuthenticated) {
+            setInterval(() => {
+                if (adminAuthenticated) {
+                    loadSettings();
+                }
+            }, 5000);
         }
     </script>
 </body>
