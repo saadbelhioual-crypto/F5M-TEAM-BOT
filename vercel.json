@@ -1,11 +1,2 @@
-{
-  "version": 2,
-  "builds": [
-    {"src": "api/bot.py", "use": "@vercel/python"},
-    {"src": "index.html", "use": "@vercel/static"}
-  ],
-  "routes": [
-    {"src": "/api/(.*)", "dest": "/api/bot.py"},
-    {"src": "/(.*)", "dest": "/index.html"}
-  ]
-}
+python-telegram-bot==20.7
+Flask==3.0.0
